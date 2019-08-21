@@ -190,7 +190,17 @@ func (m Map) Encode(ctx context.Context, tile *slippy.Tile) ([]byte, error) {
 				}
 
 				// TODO (arolek): change out the tile type for VTile. tegola.Tile will be deprecated
-				tegolaTile := tegola.NewTile(tile.ZXY())
+				z, x, y := tile.ZXY()
+				tegolaTile := tegola.Tile{
+					Z:         z,
+					X:         x,
+					Y:         y,
+					Buffer:    float64(m.TileBuffer),
+					Extent:    float64(mvt.DefaultExtent),
+					Tolerance: tegola.DefaultEpislon,
+				}
+				tegolaTile.Lat, tegolaTile.Long = tegolaTile.Num2Deg()
+				tegolaTile.Init()
 
 				sg := tegolaGeo
 				// multiple ways to turn off simplification. check the atlas init() function
@@ -204,7 +214,7 @@ func (m Map) Encode(ctx context.Context, tile *slippy.Tile) ([]byte, error) {
 				if !l.DontClip {
 					// CleanGeometry is expcting to operate in pixel coordinates so the clipRegion
 					// will need to be in this same coordinate system. this will change when the new
-					// make valid routing is implemented
+					// make valid routine is implemented
 					pbb, err := tegolaTile.PixelBufferedBounds()
 					if err != nil {
 						return fmt.Errorf("err calculating tile pixel buffer bounds: %v", err)
