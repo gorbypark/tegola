@@ -135,7 +135,7 @@ func (a *Atlas) SeedMapTile(ctx context.Context, m Map, z, x, y uint) error {
 }
 
 // PurgeMapTile will purge a map tile from the configured cache backend
-func (a *Atlas) PurgeMapTile(m Map, tile *tegola.Tile) error {
+func (a *Atlas) PurgeMapTile(m Map, tile *slippy.Tile) error {
 	if a == nil {
 		// Use the default Atlas if a, is nil. This way the empty value is
 		// still useful.
@@ -255,6 +255,6 @@ func SeedMapTile(ctx context.Context, m Map, z, x, y uint) error {
 
 // PurgeMapTile will purge a map tile from the configured cache backend
 // for the defaultAtlas
-func PurgeMapTile(m Map, tile *tegola.Tile) error {
+func PurgeMapTile(m Map, tile *slippy.Tile) error {
 	return defaultAtlas.PurgeMapTile(m, tile)
 }
